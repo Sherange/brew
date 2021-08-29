@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "667467519642",
+    "project_id": "brew-c144e",
+    "storage_bucket": "brew-c144e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667467519642:android:aa8c33258fccdb0a2a3123",
+        "android_client_info": {
+          "package_name": "com.sherange.brew"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "667467519642-ek82bd3c4vjqpk2625les4tbs1l6kq39.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8FZ48nnGOQlMkTQOUW2MELRf2-Fxc0t8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "667467519642-ek82bd3c4vjqpk2625les4tbs1l6kq39.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "667467519642-ion72vsuodibf917hivmiqua0di4bua3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sherange.brew"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
