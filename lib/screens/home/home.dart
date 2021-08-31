@@ -1,4 +1,5 @@
 import 'package:brew_crew/models/brew.dart';
+import 'package:brew_crew/screens/home/settings_from.dart';
 import "package:flutter/material.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,19 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final AuthService _auth = AuthService();
+
+    void _showSettingsPanel() {
+      showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return Container(
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 60.0),
+                child: SettingsForm(),
+              ),
+            );
+          });
+    }
 
     return StreamProvider<List<Brew>>.value(
       value: DatabaseService().brews,
@@ -29,6 +43,10 @@ class Home extends StatelessWidget {
                 await _auth.signOut();
               },
               icon: Icon(Icons.logout),
+            ),
+            IconButton(
+              onPressed: () => _showSettingsPanel(),
+              icon: Icon(Icons.settings),
             )
           ],
         ),
