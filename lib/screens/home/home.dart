@@ -1,12 +1,11 @@
-import 'package:brew_crew/models/brew.dart';
-import 'package:brew_crew/screens/home/settings_from.dart';
 import "package:flutter/material.dart";
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+import 'package:brew_crew/models/brew.dart';
 import 'package:brew_crew/services/auth_service.dart';
 import 'package:brew_crew/services/database_service.dart';
 import 'package:brew_crew/screens/home/brew_list.dart';
+import 'package:brew_crew/screens/home/settings_from.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
