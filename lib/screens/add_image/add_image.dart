@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddImage extends StatefulWidget {
   const AddImage({Key? key}) : super(key: key);
@@ -9,11 +10,19 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  List<File> _image = [];
+  List<XFile> _image = [];
 
-  // chooseIamge() async {
-  //   final pickedFile = await
-  // }
+  final ImagePicker _picker = ImagePicker();
+
+  chooseImage() async {
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _image.add(pickedFile);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +36,28 @@ class _AddImageState extends State<AddImage> {
         ],
       ),
       body: GridView.builder(
+          itemCount: _image.length + 1,
           gridDelegate:
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           itemBuilder: (context, index) {
             return index == 0
                 ? Center(
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        chooseImage();
+                      },
                       icon: Icon(Icons.add),
                     ),
                   )
-                : Container();
+                : Container(
+                    margin: EdgeInsets.all(3),
+                    child: Image.file(
+                      File(
+                        _image[index - 1].path,
+                      ),
+                      fit: BoxFit.cover,
+                    ),
+                  );
           }),
     );
   }

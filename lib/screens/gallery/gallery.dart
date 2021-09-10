@@ -1,4 +1,4 @@
-import 'package:brew_crew/screens/addImage/addImage.dart';
+import 'package:brew_crew/screens/add_image/add_image.dart';
 import 'package:flutter/material.dart';
 
 class Gallery extends StatefulWidget {
