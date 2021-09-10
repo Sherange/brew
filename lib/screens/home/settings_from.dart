@@ -77,9 +77,10 @@ class _SettingsFormState extends State<SettingsForm> {
                   value: _currentStrength != null
                       ? _currentStrength!.toDouble()
                       : userData.strength!.toDouble(),
-                  activeColor: Colors.brown[
-                      _currentStrength != null ? _currentStrength! : 100],
-                  inactiveColor: Colors.brown[100],
+                  activeColor: Colors.brown[_currentStrength != null
+                      ? _currentStrength!
+                      : userData.strength!],
+                  inactiveColor: Colors.brown[userData.strength!],
                   onChanged: (val) {
                     setState(() {
                       _currentStrength = val.round();
@@ -100,10 +101,17 @@ class _SettingsFormState extends State<SettingsForm> {
                             EdgeInsets.symmetric(vertical: 10, horizontal: 50)),
                         backgroundColor:
                             MaterialStateProperty.all(Colors.brown[400])),
-                    onPressed: () {
-                      print(_currentName);
-                      print(_currentStrength);
-                      print(_currentSugar);
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        var name = _currentName ?? userData.name.toString();
+                        var sugar = _currentSugar ?? userData.sugar.toString();
+                        var strength =
+                            _currentStrength ?? userData.strength!.toInt();
+
+                        await DatabaseService(uid: user?.uid)
+                            .updateUser(sugar, name, strength);
+                        Navigator.pop(context);
+                      }
                     },
                     child: Text(
                       "Update",

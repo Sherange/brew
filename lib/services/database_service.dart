@@ -41,6 +41,7 @@ class DatabaseService {
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic> snapshotData = snapshot.data() as Map<String, dynamic>;
     return UserData(
+        uid: uid,
         name: snapshotData["name"],
         sugar: snapshotData["sugar"],
         strength: snapshotData["strength"]);
