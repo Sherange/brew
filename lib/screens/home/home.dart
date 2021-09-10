@@ -6,6 +6,7 @@ import 'package:brew_crew/services/auth_service.dart';
 import 'package:brew_crew/services/database_service.dart';
 import 'package:brew_crew/screens/home/brew_list.dart';
 import 'package:brew_crew/screens/home/settings_from.dart';
+import 'package:brew_crew/screens/gallery/gallery.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,14 +39,21 @@ class Home extends StatelessWidget {
           backgroundColor: Colors.brown[400],
           actions: [
             IconButton(
-              onPressed: () async {
-                await _auth.signOut();
-              },
-              icon: Icon(Icons.logout),
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Gallery()),
+              ),
+              icon: Icon(Icons.photo_outlined),
             ),
             IconButton(
               onPressed: () => _showSettingsPanel(),
               icon: Icon(Icons.settings),
+            ),
+            IconButton(
+              onPressed: () async {
+                await _auth.signOut();
+              },
+              icon: Icon(Icons.logout),
             )
           ],
         ),
