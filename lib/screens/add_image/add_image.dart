@@ -1,6 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:brew_crew/services/storage_service.dart';
 
 class AddImage extends StatefulWidget {
   const AddImage({Key? key}) : super(key: key);
@@ -24,6 +27,12 @@ class _AddImageState extends State<AddImage> {
     }
   }
 
+  uploadSelectedFiles() async {
+    for (var img in _image) {
+      dynamic urlPath = await StorageService(imageFile: img).uploadFile();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +41,11 @@ class _AddImageState extends State<AddImage> {
         elevation: 0.0,
         backgroundColor: Colors.brown[400],
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.upload)),
+          IconButton(
+              onPressed: () {
+                uploadSelectedFiles();
+              },
+              icon: Icon(Icons.upload)),
         ],
       ),
       body: GridView.builder(
