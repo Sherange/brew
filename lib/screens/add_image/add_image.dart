@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:brew_crew/services/storage_service.dart';
+import 'package:brew_crew/shared/progress.dart';
 
 class AddImage extends StatefulWidget {
   const AddImage({Key? key}) : super(key: key);
@@ -13,6 +13,8 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
+  bool uploading = false;
+  double progressVal = 0;
   List<XFile> _image = [];
 
   final ImagePicker _picker = ImagePicker();
@@ -27,9 +29,14 @@ class _AddImageState extends State<AddImage> {
     }
   }
 
-  uploadSelectedFiles() async {
+  Future uploadSelectedFiles() async {
+    int i = 1;
     for (var img in _image) {
+      setState(() {
+        progressVal = i / _image.length;
+      });
       dynamic urlPath = await StorageService(imageFile: img).uploadFile();
+      i++;
     }
   }
 
@@ -43,35 +50,40 @@ class _AddImageState extends State<AddImage> {
         actions: [
           IconButton(
               onPressed: () {
-                uploadSelectedFiles();
+                setState(() {
+                  uploading = true;
+                });
+                uploadSelectedFiles()
+                    .whenComplete(() => Navigator.of(context).pop());
               },
               icon: Icon(Icons.upload)),
         ],
       ),
-      body: GridView.builder(
-          itemCount: _image.length + 1,
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-          itemBuilder: (context, index) {
-            return index == 0
-                ? Center(
-                    child: IconButton(
-                      onPressed: () {
-                        chooseImage();
-                      },
-                      icon: Icon(Icons.add),
-                    ),
-                  )
-                : Container(
-                    margin: EdgeInsets.all(3),
-                    child: Image.file(
-                      File(
-                        _image[index - 1].path,
+      body: Stack(children: [
+        GridView.builder(
+            itemCount: _image.length + 1,
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+            itemBuilder: (context, index) {
+              return index == 0
+                  ? Center(
+                      child: IconButton(
+                        onPressed: () => !uploading ? chooseImage() : null,
+                        icon: Icon(Icons.add),
                       ),
-                      fit: BoxFit.cover,
-                    ),
-                  );
-          }),
+                    )
+                  : Container(
+                      margin: EdgeInsets.all(3),
+                      child: Image.file(
+                        File(
+                          _image[index - 1].path,
+                        ),
+                        fit: BoxFit.cover,
+                      ),
+                    );
+            }),
+        uploading ? Progress(progressVal: progressVal) : SizedBox()
+      ]),
     );
   }
 }
