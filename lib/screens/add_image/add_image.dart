@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:brew_crew/services/image_service.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import 'package:brew_crew/services/storage_service.dart';
 import 'package:brew_crew/shared/progress.dart';
@@ -29,19 +32,9 @@ class _AddImageState extends State<AddImage> {
     }
   }
 
-  Future uploadSelectedFiles() async {
-    int i = 1;
-    for (var img in _image) {
-      setState(() {
-        progressVal = i / _image.length;
-      });
-      dynamic urlPath = await StorageService(imageFile: img).uploadFile();
-      i++;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User?>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Coffe Image'),
@@ -49,12 +42,25 @@ class _AddImageState extends State<AddImage> {
         backgroundColor: Colors.brown[400],
         actions: [
           IconButton(
-              onPressed: () {
+              onPressed: () async {
+                int i = 1;
+                //set uploading true
                 setState(() {
                   uploading = true;
                 });
-                uploadSelectedFiles()
-                    .whenComplete(() => Navigator.of(context).pop());
+                //upload file
+                for (var img in _image) {
+                  setState(() {
+                    progressVal = i / _image.length;
+                  });
+                  dynamic urlPath =
+                      await StorageService(imageFile: img).uploadFile();
+                  //save image path in images collection
+                  ImageService(uid: user?.uid).saveUserImage(urlPath);
+                  i++;
+                }
+                // navigate back
+                Navigator.of(context).pop();
               },
               icon: Icon(Icons.upload)),
         ],
