@@ -13,9 +13,13 @@ class ImageService {
   Future saveUserImage(String imagePath) async {
     return await imageCollection
         .doc(uid)
-        .collection('user_uploads')
-        .add({'url': imagePath});
+        .collection("user_uploads")
+        .doc()
+        .set({'url': imagePath});
   }
 
-  //  get user images
+  //get user Image stream
+  Stream<QuerySnapshot> get images {
+    return imageCollection.doc(uid).collection('user_uploads').snapshots();
+  }
 }
